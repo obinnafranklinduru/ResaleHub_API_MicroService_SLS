@@ -2,7 +2,7 @@
   "name": "user_service",
   "version": "1.0.0",
   "main": "handler.js",
-  "repository": "https://github.com/obinnafranklinduru/ResaleHub_API_MicroService_SLS",
+  "repository": "https://github.com/obinnafranklinduru/ResaleHub_API_MicroService_SLS/tree/main/user_service",
   "author": "Obinna Franklin Duru",
   "license": "MIT",
   "scripts": {
