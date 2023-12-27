@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-import { UserModel } from "../models/UserModel";
+import { UserModel } from "../models/user.model";
 
 const APP_SECRET = process.env.APP_SECRET;
 

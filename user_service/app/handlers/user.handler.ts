@@ -14,18 +14,18 @@ const userService = container.resolve(UserService);
  * @param event - AWS Lambda event
  * @returns Promise with the result of user signup operation
  */
-export const Signup = middy(async (event: APIGatewayProxyEventV2) => {
+export const Signup = async (event: APIGatewayProxyEventV2) => {
     return userService.createUser(event);
-}).use(bodyParser());
+};
 
 /**
  * Wrapper function for handling AWS Lambda events related to user login.
  * @param event - AWS Lambda event
  * @returns Promise with the result of user login operation
  */
-export const Login = middy(async (event: APIGatewayProxyEventV2) => {
+export const Login = async (event: APIGatewayProxyEventV2) => {
     return userService.userLogin(event);
-}).use(bodyParser());
+};
 
 /**
  * Handler for verifying user accounts or retrieving verification tokens.

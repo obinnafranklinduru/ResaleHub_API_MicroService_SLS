@@ -28,15 +28,24 @@ export const SuccessResponse = (data?: object) => {
  * @param error - Error details or message
  * @returns Formatted HTTP error response object
  */
-export const ErrorResponse = (code: number = 1000, error: unknown) => {
+export const ErrorResponse = (code: number = 1000, error: any) => {
+    console.log("error =>", error)
+
+    if (error.name.toLowerCase().trim() === "zoderror") {
+        // Handle zod errors
+        const errorMessage = error.issues[0].message || "Validation Error Occurred";
+        
+        return formatResponse(code, "failed", errorMessage);
+    }
+
     if (Array.isArray(error)) {
         // Handle validation errors
         const errorObject = error[0].constraints;
-        const errorMessage =
-            errorObject[Object.keys(errorObject)[0]] || "Error Occurred";
-        return formatResponse(code, errorMessage, errorMessage);
+        const errorMessage = errorObject[Object.keys(errorObject)[0]] || "Error Occurred";
+
+        return formatResponse(code, "failed", errorMessage);
     }
 
     // Handle other types of errors
-    return formatResponse(code, `${error}`, error);
+    return formatResponse(code, "failed", error.message);
 };

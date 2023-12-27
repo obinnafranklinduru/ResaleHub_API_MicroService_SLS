@@ -6,8 +6,6 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs16.x
-  environment:
-    APP_SECRET: ${env:APP_SECRET}
   versionFunctions: false
   stage: "dev"
   region: me-south-1
@@ -89,3 +87,5 @@ functions:
 plugins:
   - serverless-offline # Simulate AWS Lambda and API Gateway locally
   - serverless-plugin-typescript # Enable TypeScript support
+  - serverless-dotenv-plugin # Loads environment variables from a .env file
+  - serverless-plugin-warmup #  Ensures that your AWS Lambda function stays "warm" (pre-warmed).
