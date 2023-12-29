@@ -11,7 +11,7 @@ const userService = container.resolve(UserService);
 
 /**
  * Wrapper function for handling AWS Lambda events related to user signup.
- * @param event - AWS Lambda event
+ * @param event - AWS Lambda event    
  * @returns Promise with the result of user signup operation
  */
 export const Signup = async (event: APIGatewayProxyEventV2) => {

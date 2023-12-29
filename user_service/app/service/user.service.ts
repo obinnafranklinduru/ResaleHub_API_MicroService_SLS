@@ -27,20 +27,21 @@ export class UserService {
             const input = JSON.parse(event.body);
             const data = SignupInputSchema.parse(input);
 
-            const salt = await getSalt();
-            const hashedPassword = await getHashedPassword(data.password, salt);
+            // const salt = await getSalt();
+            // const hashedPassword = await getHashedPassword(data.password, salt);
 
-            const userData = await this.repository.createAccount(
-                {
-                    email: input.email,
-                    password: hashedPassword,
-                    phone: input.phone,
-                    userType: "BUYER",
-                    salt: salt,
-                }
-            );
+            // const userData = await this.repository.createAccount(
+            //     {
+            //         email: input.email,
+            //         password: hashedPassword,
+            //         phone: input.phone,
+            //         userType: "BUYER",
+            //         salt: salt,
+            //     }
+            // );
 
-            return SuccessResponse(userData);
+            // return SuccessResponse(userData);
+            return SuccessResponse({ data: "success"});
         } catch (error) {
             return ErrorResponse(400, error)
         }
@@ -71,7 +72,7 @@ export class UserService {
         }
     }
 
-    async GetVerificationToken(event: APIGatewayProxyEventV2) {
+    async getVerificationToken(event: APIGatewayProxyEventV2) {
         try {
             // Extract authorization token from the request headers
             const token = event.headers.authorization;

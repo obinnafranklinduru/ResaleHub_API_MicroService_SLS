@@ -8,7 +8,7 @@ provider:
   runtime: nodejs16.x
   versionFunctions: false
   stage: "dev"
-  region: me-south-1
+  region: eu-central-1
   httpApi:
     cors: true # Enable CORS for HTTP API
 
@@ -88,4 +88,3 @@ plugins:
   - serverless-offline # Simulate AWS Lambda and API Gateway locally
   - serverless-plugin-typescript # Enable TypeScript support
   - serverless-dotenv-plugin # Loads environment variables from a .env file
-  - serverless-plugin-warmup #  Ensures that your AWS Lambda function stays "warm" (pre-warmed).

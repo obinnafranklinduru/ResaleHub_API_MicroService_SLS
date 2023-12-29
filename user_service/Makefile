@@ -7,4 +7,4 @@ stop_db:
 server:
 	yarn run dev
 
-.PHONEY: start_db stop_db server
+.PHONY: start_db stop_db server
