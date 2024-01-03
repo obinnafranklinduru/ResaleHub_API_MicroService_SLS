@@ -14,5 +14,5 @@ export const LoginInputSchema = z.object(
 );
 
 export const SignupInputSchema = LoginInputSchema.extend({
-    phone: z.string().min(10).max(13)
+    phone: z.string().min(10).max(15)
 });

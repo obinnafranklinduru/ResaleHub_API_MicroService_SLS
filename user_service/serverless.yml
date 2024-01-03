@@ -5,10 +5,10 @@ frameworkVersion: "3"
 # AWS provider settings
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   versionFunctions: false
   stage: "dev"
-  region: eu-central-1
+  region: eu-north-1
   httpApi:
     cors: true # Enable CORS for HTTP API
 

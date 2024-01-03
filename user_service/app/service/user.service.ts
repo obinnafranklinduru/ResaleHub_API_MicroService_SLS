@@ -1,49 +1,40 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
-import { autoInjectable } from "tsyringe";
-
 import { SuccessResponse, ErrorResponse } from "../utils/response";
 import { UserRepository } from "../respository/user.repository";
 import { LoginInputSchema, SignupInputSchema } from "../models/dto";
-import { GenerateAccessCode, SendVerificationCode } from "../utils/notification";
 import {
     getSalt,
     getHashedPassword,
     validatePassword,
     getToken,
-    verifyToken,
 } from "../utils";
 
-@autoInjectable()
 export class UserService {
-    repository: UserRepository;
+    private repository: UserRepository;
 
     constructor(repository: UserRepository) {
         this.repository = repository;
     }
 
-    // User Creation, Validation & Login
     async createUser(event: APIGatewayProxyEventV2) {
         try {
             const input = JSON.parse(event.body);
-            const data = SignupInputSchema.parse(input);
+            const data = await SignupInputSchema.parseAsync(input);
 
-            // const salt = await getSalt();
-            // const hashedPassword = await getHashedPassword(data.password, salt);
+            const salt = await getSalt();
+            const hashedPassword = await getHashedPassword(data.password, salt);
 
-            // const userData = await this.repository.createAccount(
-            //     {
-            //         email: input.email,
-            //         password: hashedPassword,
-            //         phone: input.phone,
-            //         userType: "BUYER",
-            //         salt: salt,
-            //     }
-            // );
+            const userData = await this.repository.createAccount({
+                email: input.email,
+                password: hashedPassword,
+                phone: input.phone,
+                userType: "BUYER",
+                salt: salt,
+            });
 
-            // return SuccessResponse(userData);
-            return SuccessResponse({ data: "success"});
+            return userData;
         } catch (error) {
-            return ErrorResponse(400, error)
+            throw new Error(`Failed to create user account: ${error.message}`);
         }
     }
 
@@ -54,52 +45,22 @@ export class UserService {
 
             const user = await this.repository.findAccount(data.email);
 
-            const verified = await validatePassword(
-                data.password,
-                user.password,
-                user.salt
-            );
+            const verified = await validatePassword(data.password, user.password, user.salt);
 
             if (!verified) {
-                throw new Error("password does not match!");
+                throw new Error("Password does not match!");
             }
 
             const token = getToken(user);
 
-            return SuccessResponse({ token });
+            return { token };
         } catch (error) {
-            return ErrorResponse(400, error)
+            throw new Error(`Failed to login: ${error.message}`);
         }
     }
 
     async getVerificationToken(event: APIGatewayProxyEventV2) {
-        try {
-            // Extract authorization token from the request headers
-            const token = event.headers.authorization;
-
-            // Verify the token to get the payload
-            const payload = await verifyToken(token);
-
-            // Check if the payload is valid
-            if (payload) {
-                // Generate a new verification code and its expiry time
-                const { code, expiry } = GenerateAccessCode();
-
-                // Send the verification code via SMS
-                await SendVerificationCode(code, payload.phone);
-
-                // Return a success response
-                return SuccessResponse({
-                    message: "Verification code is sent to your registered mobile number!",
-                });
-            }
-        } catch (error) {
-            // Log any errors that occur during the verification token process
-            console.error("Error getting verification token:", error);
-
-            // Return an error response
-            return ErrorResponse(500, "Internal Server Error");
-        }
+        return SuccessResponse({ message: "Response from  Get Verify User" });
     }
 
     async verifyUser(event: APIGatewayProxyEventV2) {
